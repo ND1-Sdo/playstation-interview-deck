@@ -30,7 +30,8 @@
       --subheader-h: 42px;
       --chrome-top: calc(var(--subheader-h) + 2px);
       --content-max: 820px;
-      --content-wide: min(1120px, 94vw);
+      --content-wide: min(1320px, 97vw);
+      --content-full: min(1560px, 98vw);
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-spring: cubic-bezier(0.34, 1.45, 0.64, 1);
       --dur-fast: 0.18s;
@@ -225,7 +226,13 @@
       overflow-y: auto;
     }
     .slide.slide-back { transform: translateX(-32px) scale(0.985); }
-    .slide.dense { justify-content: flex-start; padding-top: calc(var(--chrome-top) + 12px); }
+    .slide.dense {
+      justify-content: flex-start;
+      align-items: stretch;
+      padding-top: calc(var(--chrome-top) + 8px);
+      padding-left: clamp(16px, 2.5vw, 40px);
+      padding-right: clamp(16px, 2.5vw, 40px);
+    }
     .slide.active { opacity: 1; pointer-events: auto; z-index: 1; transform: translateX(0) scale(1); }
     .slide.leave-fwd { opacity: 0; transform: translateX(-36px) scale(0.98); }
     .slide.leave-back { opacity: 0; transform: translateX(36px) scale(0.98); }
@@ -245,6 +252,7 @@
     .slide-panel.reveal > .role-fit,
     .slide-panel.reveal > .grid-2,
     .slide-panel.reveal > .grid-3,
+    .slide-panel.reveal > .script-panel,
     .slide-panel.reveal > table,
     .slide-panel.reveal > .fix-grid {
       animation: revealUp 0.52s var(--ease-out-expo) backwards;
@@ -263,6 +271,7 @@
     .slide-panel.reveal > .fix-grid,
     .slide-panel.reveal > .grid-2,
     .slide-panel.reveal > .grid-3,
+    .slide-panel.reveal > .script-panel,
     .slide-panel.reveal > .role-fit { animation-delay: 0.16s; }
     .slide-panel.reveal > .quote,
     .slide-panel.reveal > table { animation-delay: 0.2s; }
@@ -299,12 +308,14 @@
 
     .slide-panel { position: relative; max-width: var(--content-max); width: 100%; }
 
-    .slide-head { margin-bottom: 16px; }
+    .slide.dense .slide-panel,
+    [data-wide-slide] .slide-panel { max-width: var(--content-full); width: 100%; }
+    [data-fix-slide] .slide-panel { max-width: var(--content-wide); width: 100%; }
+    [data-fix-slide] h2 { font-size: clamp(20px, 2.2vw, 26px); margin-bottom: 0; }
+
+    .slide-head { margin-bottom: 12px; }
     .slide-head .tag { margin-bottom: 8px; }
     .slide-head h2 { margin-bottom: 0; font-size: clamp(20px, 2.2vw, 26px); }
-
-    [data-fix-slide] .slide-panel { max-width: var(--content-wide); }
-    [data-fix-slide] h2 { font-size: clamp(20px, 2.2vw, 26px); margin-bottom: 0; }
 
     .slide-toolbar {
       display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -563,8 +574,10 @@
       box-shadow: 0 0 6px currentColor;
     }
 
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; }
+    .grid-3.stretch-cards .card { min-height: 100%; display: flex; flex-direction: column; }
+    .slide.dense .scope-note { max-width: none; margin-bottom: 12px; }
     .card {
       background: var(--ps-panel); border: 1px solid var(--ps-line); border-radius: 6px;
       padding: 14px 16px;
@@ -603,6 +616,32 @@
     .card .meta { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ps-muted); margin-bottom: 6px; }
     .card .fit { font-size: 10px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--ps-line); color: rgba(255,255,255,0.78); line-height: 1.45; }
     .card .fit strong { color: #fff; }
+
+    .script-panel {
+      margin-top: 12px; padding: 16px 18px;
+      border-top: 3px solid var(--ps-cross);
+    }
+    .script-panel h3 { font-size: 14px; margin-bottom: 4px; }
+    .script-panel > .meta { margin-bottom: 10px; }
+    .script-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%;
+    }
+    .script-item {
+      background: rgba(15, 23, 42, 0.45);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px; padding: 10px 12px;
+    }
+    .script-item code {
+      display: block; font-size: 10px; font-weight: 700;
+      color: var(--ps-cross); margin-bottom: 5px;
+      font-family: "SF Mono", Menlo, Monaco, monospace;
+    }
+    .script-item p { font-size: 10px; line-height: 1.45; margin-bottom: 6px; }
+    .script-item .when {
+      font-size: 9px; color: rgba(255,255,255,0.65); line-height: 1.4;
+      padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.1);
+    }
+    .script-item .when strong { color: rgba(255,255,255,0.9); font-weight: 700; }
 
     .triage-flow {
       display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0 16px;
@@ -742,7 +781,7 @@
     }
 
     @media (max-width: 900px) {
-      .fix-grid, .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .fix-grid, .grid-2, .grid-3, .script-grid { grid-template-columns: 1fr; }
       .slide { padding-left: 20px; padding-right: 20px; }
       .brand-context { font-size: 8px; }
       .nav-sections .ps-btn { padding: 5px 7px; font-size: 8px; }
@@ -805,12 +844,12 @@
     </section>
 
     <!-- 2 -->
-    <section class="slide dense" data-title="Career Overview">
+    <section class="slide dense" data-title="Career Overview" data-wide-slide>
       <div class="print-header" style="display:none"></div>
       <div class="slide-panel">
         <p class="tag">Career Overview</p>
         <h2>Three proofs of engineering-facing support</h2>
-        <div class="grid-3">
+        <div class="grid-3 stretch-cards">
           <div class="card tri">
             <p class="meta">Jul 2025 – Jun 2026 · Dublin</p>
             <h3>LinkedIn EMEA HQ</h3>
@@ -975,7 +1014,7 @@
     </section>
 
     <!-- 5 -->
-    <section class="slide dense" data-title="Dropbox & AstraDesk">
+    <section class="slide dense" data-title="Dropbox & AstraDesk" data-wide-slide>
       <div class="print-header" style="display:none"></div>
       <div class="slide-panel">
         <div class="slide-head">
@@ -983,7 +1022,7 @@
           <h2>Dropbox Sign &amp; Fax L2 + AstraDesk</h2>
         </div>
         <p class="scope-note">Same ownership model as LinkedIn — <strong>trace → isolate → fix → document</strong> — applied to Sign &amp; Fax user issues, APIs, and a live SaaS I built.</p>
-        <div class="grid-3">
+        <div class="grid-3 stretch-cards">
           <div class="card tri">
             <p class="meta">LinkedIn recap · Internal tooling</p>
             <h3>EMEA HQ engineering support</h3>
@@ -1135,7 +1174,7 @@
     </section>
 
     <!-- 7 -->
-    <section class="slide dense" data-title="Capabilities">
+    <section class="slide dense" data-title="Capabilities" data-wide-slide>
       <div class="print-header" style="display:none"></div>
       <div class="slide-panel">
         <div class="slide-head">
@@ -1143,7 +1182,7 @@
           <h2>What I bring to PlayStation IT Engineering Support</h2>
         </div>
         <p class="scope-note">Not a tool list — <strong>how each capability shows up when an engineer is blocked</strong> and production time is on the line.</p>
-        <div class="grid-3">
+        <div class="grid-3 stretch-cards">
           <div class="card tri">
             <h3>Endpoint &amp; MDM</h3>
             <p>Intune, Autopilot, Workspace ONE — Jamf-ready.</p>
@@ -1165,14 +1204,51 @@
             <p class="fit"><strong>At PS:</strong> Trace entitlement / config in DB vs admin console — evidence before escalation.</p>
           </div>
           <div class="card tri">
-            <h3>Automation</h3>
-            <p>PowerShell, Bash, Python — repeatable runbooks.</p>
-            <p class="fit"><strong>At PS:</strong> Turn repeat fixes into scripts — onboarding checks, group audits, compliance reports.</p>
-          </div>
-          <div class="card o">
             <h3>Live Slack ownership</h3>
             <p>Acknowledge → own → update → escalate.</p>
             <p class="fit"><strong>At PS:</strong> Engineer in thread — ETA in minutes, status every 15 min, eng gets IDs not adjectives.</p>
+          </div>
+          <div class="card o">
+            <h3>Documentation</h3>
+            <p>ServiceNow RCA, runbooks, handover notes.</p>
+            <p class="fit"><strong>At PS:</strong> Every repeat fix becomes a searchable KB — next engineer gets steps, not a Slack archaeology dig.</p>
+          </div>
+        </div>
+        <div class="card x script-panel">
+          <p class="meta">Automation · PowerShell, Bash, Python</p>
+          <h3>Scripts I write — what they do &amp; when I'd run them</h3>
+          <p style="font-size:11px;color:var(--ps-muted);margin-bottom:10px">Repeatable checks beat heroics. Below: scripts I'd build at PS, plus ones I ship today on AstraDesk.</p>
+          <div class="script-grid">
+            <div class="script-item">
+              <code>onboarding-audit.ps1</code>
+              <p>Batch-check new hires: Okta MFA enrolled, AD groups, Intune enrolled, M365 licence.</p>
+              <p class="when"><strong>Scenario:</strong> Monday — 6 engineers start; manager asks "who's still blocked?" before stand-up.</p>
+            </div>
+            <div class="script-item">
+              <code>jamf-compliance-sweep.sh</code>
+              <p>API pull: devices not checked in 7d, FileVault off, cert profile missing → CSV for tickets.</p>
+              <p class="when"><strong>Scenario:</strong> Pre-audit compliance pass — fix drift before security review.</p>
+            </div>
+            <div class="script-item">
+              <code>github-group-diff.ps1</code>
+              <p>Compare GitHub org roster vs AD "Engineering" group — flag orphans and missing members.</p>
+              <p class="when"><strong>Scenario:</strong> "Can't clone repo" — script finds missing AD group in 30 seconds.</p>
+            </div>
+            <div class="script-item">
+              <code>smoke_all_platforms.sh</code>
+              <p>Analyze, test, and build web + macOS + iOS after a deploy — mirrors CI locally.</p>
+              <p class="when"><strong>Scenario:</strong> Post-change validation — prove the fix before closing the incident.</p>
+            </div>
+            <div class="script-item">
+              <code>apply_supabase_sql.sh</code>
+              <p>Apply a SQL migration to prod safely via Supabase CLI (signing RPC, entitlements).</p>
+              <p class="when"><strong>Scenario:</strong> Signing timeout — compact payload migration shipped with evidence.</p>
+            </div>
+            <div class="script-item">
+              <code>deploy_supabase_functions.sh</code>
+              <p>Deploy edge functions (contract draft API, webhooks) to linked Supabase project.</p>
+              <p class="when"><strong>Scenario:</strong> Hotfix backend logic without a full app release cycle.</p>
+            </div>
           </div>
         </div>
       </div>

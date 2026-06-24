@@ -623,6 +623,13 @@
     }
     .script-panel h3 { font-size: 14px; margin-bottom: 4px; }
     .script-panel > .meta { margin-bottom: 10px; }
+    .script-section-label {
+      font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,255,255,0.55); font-weight: 700;
+      margin: 14px 0 8px; padding-bottom: 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .script-section-label:first-of-type { margin-top: 4px; }
     .script-grid {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%;
     }
@@ -636,6 +643,13 @@
       color: var(--ps-cross); margin-bottom: 5px;
       font-family: "SF Mono", Menlo, Monaco, monospace;
     }
+    .script-item .tag-pill {
+      display: inline-block; font-size: 8px; letter-spacing: 0.08em;
+      text-transform: uppercase; font-weight: 700;
+      padding: 2px 6px; border-radius: 3px; margin-bottom: 6px;
+    }
+    .script-item .tag-pill.ps { background: rgba(134, 239, 172, 0.15); color: var(--ps-triangle); border: 1px solid rgba(134, 239, 172, 0.35); }
+    .script-item .tag-pill.ad { background: rgba(147, 197, 253, 0.12); color: var(--ps-cross); border: 1px solid rgba(147, 197, 253, 0.3); }
     .script-item p { font-size: 10px; line-height: 1.45; margin-bottom: 6px; }
     .script-item .when {
       font-size: 9px; color: rgba(255,255,255,0.65); line-height: 1.4;
@@ -1216,38 +1230,48 @@
         </div>
         <div class="card x script-panel">
           <p class="meta">Automation · PowerShell, Bash, Python</p>
-          <h3>Scripts I write — what they do &amp; when I'd run them</h3>
-          <p style="font-size:11px;color:var(--ps-muted);margin-bottom:10px">Repeatable checks beat heroics. Below: scripts I'd build at PS, plus ones I ship today on AstraDesk.</p>
+          <h3>Scripts — what they do &amp; when I'd run them</h3>
+          <p style="font-size:11px;color:var(--ps-muted);margin-bottom:4px">I automate repeat checks so engineers get answers in minutes, not ticket queues. Three I'd build at PS; three I ship today on AstraDesk.</p>
+          <p class="script-section-label">Would build at PlayStation</p>
           <div class="script-grid">
             <div class="script-item">
-              <code>onboarding-audit.ps1</code>
-              <p>Batch-check new hires: Okta MFA enrolled, AD groups, Intune enrolled, M365 licence.</p>
-              <p class="when"><strong>Scenario:</strong> Monday — 6 engineers start; manager asks "who's still blocked?" before stand-up.</p>
+              <span class="tag-pill ps">Onboarding</span>
+              <code>new-hire-readiness.ps1</code>
+              <p>CSV of start dates → checks Okta active + MFA, AD groups, Jamf enrolled/compliant, M365 licence, GitHub org. Red/amber/green report.</p>
+              <p class="when"><strong>Say in interview:</strong> "Gameplay engineer starts Monday — I run this Sunday so day-one isn't a scavenger hunt."</p>
             </div>
             <div class="script-item">
+              <span class="tag-pill ps">MDM</span>
               <code>jamf-compliance-sweep.sh</code>
-              <p>API pull: devices not checked in 7d, FileVault off, cert profile missing → CSV for tickets.</p>
-              <p class="when"><strong>Scenario:</strong> Pre-audit compliance pass — fix drift before security review.</p>
+              <p>Jamf API pull: no check-in 7d+, FileVault escrow missing, dev cert profile absent → ticket-ready CSV with device ID + owner.</p>
+              <p class="when"><strong>Say in interview:</strong> "Security wants Mac posture before release week — fix top offenders, attach evidence."</p>
             </div>
             <div class="script-item">
-              <code>github-group-diff.ps1</code>
-              <p>Compare GitHub org roster vs AD "Engineering" group — flag orphans and missing members.</p>
-              <p class="when"><strong>Scenario:</strong> "Can't clone repo" — script finds missing AD group in 30 seconds.</p>
+              <span class="tag-pill ps">Identity</span>
+              <code>github-access-audit.ps1</code>
+              <p>Cross-ref GitHub org vs AD security groups — flags missing group membership either direction.</p>
+              <p class="when"><strong>Say in interview:</strong> "403 on push in Slack — script finds missing eng GitHub group in 30 seconds, not a 2-hour rabbit hole."</p>
             </div>
+          </div>
+          <p class="script-section-label">Ship today on AstraDesk — same discipline</p>
+          <div class="script-grid">
             <div class="script-item">
+              <span class="tag-pill ad">Validation</span>
               <code>smoke_all_platforms.sh</code>
-              <p>Analyze, test, and build web + macOS + iOS after a deploy — mirrors CI locally.</p>
-              <p class="when"><strong>Scenario:</strong> Post-change validation — prove the fix before closing the incident.</p>
+              <p>Pub get → analyze → test → web + macOS + iOS simulator builds. Mirrors CI before I call anything fixed.</p>
+              <p class="when"><strong>Say in interview:</strong> "I don't close an incident until smoke passes — same habit I'd bring to post-change checks at PS."</p>
             </div>
             <div class="script-item">
+              <span class="tag-pill ad">SQL / RCA</span>
               <code>apply_supabase_sql.sh</code>
-              <p>Apply a SQL migration to prod safely via Supabase CLI (signing RPC, entitlements).</p>
-              <p class="when"><strong>Scenario:</strong> Signing timeout — compact payload migration shipped with evidence.</p>
+              <p>Apply reviewed SQL to prod via Supabase CLI; capture output for the incident record.</p>
+              <p class="when"><strong>Say in interview:</strong> "Signing RPC timeout — compact payload migration with before/after query proof for eng."</p>
             </div>
             <div class="script-item">
-              <code>deploy_supabase_functions.sh</code>
-              <p>Deploy edge functions (contract draft API, webhooks) to linked Supabase project.</p>
-              <p class="when"><strong>Scenario:</strong> Hotfix backend logic without a full app release cycle.</p>
+              <span class="tag-pill ad">Deploy</span>
+              <code>deploy_web_render.sh</code>
+              <p>Flutter web release build + Render deploy hook — hotfix to prod without waiting on a full release train.</p>
+              <p class="when"><strong>Say in interview:</strong> "Auth/signing hotfix live in ~15 min — build, deploy, verify URL, then update the thread."</p>
             </div>
           </div>
         </div>

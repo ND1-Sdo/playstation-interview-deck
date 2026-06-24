@@ -617,6 +617,15 @@
     .card .meta { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ps-muted); margin-bottom: 6px; }
     .card .fit { font-size: 10px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--ps-line); color: rgba(255,255,255,0.78); line-height: 1.45; }
     .card .fit strong { color: #fff; }
+    .card .tool-row {
+      display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px;
+    }
+    .card .tool-row span {
+      font-size: 7px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 3px 6px; border-radius: 3px;
+      background: rgba(252, 165, 165, 0.12); color: var(--ps-circle);
+      border: 1px solid rgba(252, 165, 165, 0.28);
+    }
 
     .script-panel {
       margin-top: 12px; padding: 16px 18px;
@@ -874,8 +883,8 @@
           <div class="card o">
             <p class="meta">L2 · Dropbox Sign &amp; Fax</p>
             <h3>Customer product support</h3>
-            <p>Sign APIs, embedded signing, webhooks, templates — plus Fax send, delivery, credits, and Fax API integrations. Zendesk L2 with engineering escalation.</p>
-            <p class="ex"><em>Ex:</em> Sign webhook missed → CRM stuck pending. Fax "sent" but never arrived → transmission log + PDF format fix.</p>
+            <p>Sign APIs, embedded signing, webhooks, templates — plus Fax send, delivery, credits, and Fax API integrations. L2 with <strong>Sentry</strong>, <strong>Datadog</strong>, admin profiles, <strong>Stripe/SQL</strong>, and <strong>Jira</strong> eng escalation.</p>
+            <p class="ex"><em>Ex:</em> Stripe paid, 0 seats in admin → SQL entitlement row → fixed same day. Sign webhook missed → Sentry + Datadog trace → Jira handoff with repro.</p>
           </div>
           <div class="card x">
             <p class="meta">Founder · Live prod</p>
@@ -1036,7 +1045,7 @@
           <p class="tag">L2 Product · Production Builder</p>
           <h2>Dropbox Sign &amp; Fax L2 + AstraDesk</h2>
         </div>
-        <p class="scope-note">Same ownership model as LinkedIn — <strong>trace → isolate → fix → document</strong> — applied to Sign &amp; Fax user issues, APIs, and a live SaaS I built.</p>
+        <p class="scope-note">Same ownership model as LinkedIn — <strong>trace → isolate → fix → document</strong> — applied to Sign &amp; Fax with <strong>Sentry</strong>, <strong>Datadog</strong>, admin profiles, <strong>Stripe/SQL</strong>, and <strong>Jira</strong>; plus a live SaaS I built.</p>
         <div class="grid-3 stretch-cards">
           <div class="card tri">
             <p class="meta">LinkedIn recap · Internal tooling</p>
@@ -1051,16 +1060,19 @@
           </div>
           <div class="card o">
             <p class="meta">Dropbox · Sign &amp; Fax L2</p>
-            <h3>User-facing product issues</h3>
-            <p>Zendesk L2 for Sign and Fax — end users, admins, and developers integrating Sign API / Fax API into their workflows.</p>
-            <p class="fit"><strong>Triage:</strong> Reproduce user steps → admin console + API logs → fix, educate, or eng escalation with request/fax IDs.</p>
+            <h3>L2 support + engineering tooling</h3>
+            <p>Zendesk L2 for Sign and Fax — end users, admins, and API integrators. Used <strong>internal admin profiles</strong>, <strong>Sentry</strong>, <strong>Datadog</strong>, webhook/API logs, <strong>Stripe</strong>, read-only <strong>SQL</strong>, and <strong>Jira</strong> to hunt bugs — remediate in-session when possible, or escalate with full evidence.</p>
+            <div class="tool-row">
+              <span>Sentry</span><span>Datadog</span><span>Admin profile</span><span>Webhook logs</span><span>API logs</span><span>Stripe</span><span>SQL console</span><span>Zendesk</span><span>Jira</span><span>PagerDuty</span>
+            </div>
+            <p class="fit"><strong>Triage:</strong> Reproduce → admin profile → Sentry + Datadog → Stripe/SQL if billing → fix or Jira handoff with stack trace, dashboard links, and IDs.</p>
             <ul class="ex-list">
-              <li><strong>Sign · Signer blocked</strong> — link expired, "already signed," or embedded iFrame blank on mobile</li>
-              <li><strong>Sign · Webhook missed</strong> — customer's CRM stuck pending; callback URL TLS error or 4xx on their endpoint</li>
-              <li><strong>Sign · Template break</strong> — merge fields empty after deploy; batch send failed mid-run</li>
-              <li><strong>Fax · Not received</strong> — status shows sent/delivered but recipient has nothing; bad number format or carrier reject</li>
-              <li><strong>Fax · Can't send</strong> — out of pages/credits, PDF rejected (page limit, resolution), cover page error</li>
-              <li><strong>Fax · API status</strong> — customer's app shows "sending" forever; Fax API callback not updating</li>
+              <li><strong>Admin profile · Entitlement</strong> — paid seats vs active users; team suspension blocking send — corrected before eng ticket</li>
+              <li><strong>Sentry · Platform spike</strong> — signature_request ID → stack trace; known regression → workaround + hotfix with eng</li>
+              <li><strong>Datadog · API trace</strong> — Sign/Fax API 5xx or latency; request ID in APM → Jira with dashboard link</li>
+              <li><strong>Stripe + SQL · Billing drift</strong> — paid in Stripe, 0 seats in admin; SQL entitlement row confirms → rectified in-session</li>
+              <li><strong>Sign · Webhook missed</strong> — webhook log + Sentry/Datadog on callback handler — customer TLS fix or eng replay</li>
+              <li><strong>Jira + PagerDuty</strong> — platform bug confirmed; Jira ticket with Sentry/Datadog links; on-call looped when production-impacting</li>
             </ul>
           </div>
           <div class="card x">
@@ -1087,7 +1099,7 @@
           <h2>Sign &amp; Fax — typical user issues</h2>
         </div>
         <div class="slide-toolbar">
-          <p class="hint-bar">Dropbox L2 scenarios — <strong>click steps</strong> or run <strong>▶ Walkthrough</strong> as you narrate.</p>
+          <p class="hint-bar">Dropbox L2 scenarios — admin profile, <strong>Sentry</strong>, <strong>Datadog</strong>, Stripe/SQL — <strong>click steps</strong> or run <strong>▶ Walkthrough</strong> as you narrate.</p>
           <div class="slide-toolbar-actions">
             <button class="walkthrough-btn" type="button" data-walkthrough>▶ Walkthrough</button>
             <button class="reset-fix-btn" type="button" data-reset-fix>↺ Reset</button>
@@ -1109,10 +1121,10 @@
               <div class="fix-progress"><span class="fix-progress-text">0/5</span><div class="fix-progress-bar"><div class="fix-progress-fill"></div></div></div>
               <ol class="fix-steps">
                 <li><span class="step-num">1</span>Get signature_request ID + signer email — reproduce in browser / mobile</li>
-                <li><span class="step-num">2</span>Admin console: request status, expiry, routing order, field placement</li>
-                <li><span class="step-num">3</span>Embedded? Check iFrame domain allowlist, OAuth app, mobile viewport</li>
-                <li><span class="step-num">4</span>Resend / duplicate request or extend expiry if policy allows</li>
-                <li><span class="step-num">5</span>Document pattern in Zendesk — escalate with request ID if platform bug</li>
+                <li><span class="step-num">2</span>Internal admin profile: account state, request status, expiry, routing order, field placement</li>
+                <li><span class="step-num">3</span>Sentry + Datadog: request ID / user — stack trace, APM span, release, known regression?</li>
+                <li><span class="step-num">4</span>Embedded? iFrame allowlist, OAuth app, mobile viewport — resend / extend expiry if policy allows</li>
+                <li><span class="step-num">5</span>Fix in-session or Jira to eng — request ID + Sentry/Datadog links + repro steps</li>
               </ol>
               <div class="fix-result"><strong>Result:</strong> Signer completes. User unblocked same session.</div>
             </div>
@@ -1131,10 +1143,10 @@
               <div class="fix-progress"><span class="fix-progress-text">0/5</span><div class="fix-progress-bar"><div class="fix-progress-fill"></div></div></div>
               <ol class="fix-steps">
                 <li><span class="step-num">1</span>Confirm signature_request ID and event type expected (signed, all_signed)</li>
-                <li><span class="step-num">2</span>Review webhook delivery log — HTTP status, retries, response body</li>
-                <li><span class="step-num">3</span>Validate callback URL, TLS cert, and customer's endpoint returns 2xx</li>
-                <li><span class="step-num">4</span>Test with API key / OAuth token — resend or manual event replay if supported</li>
-                <li><span class="step-num">5</span>Engineering handoff with event IDs + payload if platform-side failure</li>
+                <li><span class="step-num">2</span>Admin profile + webhook delivery log — HTTP status, retries, response body</li>
+                <li><span class="step-num">3</span>Sentry + Datadog: handler error vs customer endpoint — APM trace on API callback path</li>
+                <li><span class="step-num">4</span>Validate callback URL, TLS cert, customer's endpoint returns 2xx — test API key / OAuth token</li>
+                <li><span class="step-num">5</span>Remediate with customer or Jira to eng — event IDs, Sentry/Datadog links, payload snapshot</li>
               </ol>
               <div class="fix-result"><strong>Result:</strong> Integration synced. Customer workflow resumes.</div>
             </div>
@@ -1153,10 +1165,10 @@
               <div class="fix-progress"><span class="fix-progress-text">0/5</span><div class="fix-progress-bar"><div class="fix-progress-fill"></div></div></div>
               <ol class="fix-steps">
                 <li><span class="step-num">1</span>Get fax ID, sender account, recipient number, and timestamp sent</li>
-                <li><span class="step-num">2</span>Verify number in E.164 format — country code, no trunk prefix errors</li>
-                <li><span class="step-num">3</span>Check transmission report / delivery status in admin — failed vs delivered</li>
+                <li><span class="step-num">2</span>Internal admin profile: verify number, account entitlement, sender permissions</li>
+                <li><span class="step-num">3</span>Transmission report in admin profile — failed vs delivered; Sentry/Datadog if platform-side carrier error</li>
                 <li><span class="step-num">4</span>Validate PDF: page count within limit, readable resolution, no password lock</li>
-                <li><span class="step-num">5</span>Retry reduced page count or alternate number — escalate with fax_id if carrier reject</li>
+                <li><span class="step-num">5</span>Retry or rectify in-session — Jira + PagerDuty if carrier reject with production impact</li>
               </ol>
               <div class="fix-result"><strong>Result:</strong> Fax delivered or clear explanation + next steps for user.</div>
             </div>
@@ -1174,11 +1186,11 @@
             <div class="fix-body">
               <div class="fix-progress"><span class="fix-progress-text">0/5</span><div class="fix-progress-bar"><div class="fix-progress-fill"></div></div></div>
               <ol class="fix-steps">
-                <li><span class="step-num">1</span>Confirm account plan — fax pages included vs add-on credits remaining</li>
+                <li><span class="step-num">1</span>Internal admin profile: plan, fax pages/credits, team suspension, sender permissions</li>
                 <li><span class="step-num">2</span>Check file: PDF only, page limit, file size, no encryption blocking render</li>
                 <li><span class="step-num">3</span>Cover page: sender name, fax number, and recipient fields complete</li>
-                <li><span class="step-num">4</span>Billing: Stripe/plan mismatch if enterprise — sync entitlement or add credits</li>
-                <li><span class="step-num">5</span>Test send to known-good number — document fix in Zendesk for repeat callers</li>
+                <li><span class="step-num">4</span>Stripe vs admin profile vs SQL entitlement row — sync plan/credits or add pages</li>
+                <li><span class="step-num">5</span>Test send to known-good number — document fix in Zendesk; Jira if platform billing bug</li>
               </ol>
               <div class="fix-result"><strong>Result:</strong> User sending faxes again. Billing/format issue resolved.</div>
             </div>
@@ -1216,7 +1228,7 @@
           <div class="card sq">
             <h3>SQL &amp; RCA</h3>
             <p>PostgreSQL, Supabase, Oracle — read-only prod queries.</p>
-            <p class="fit"><strong>At PS:</strong> Trace entitlement / config in DB vs admin console — evidence before escalation.</p>
+            <p class="fit"><strong>At Dropbox:</strong> Stripe vs admin profile vs SQL entitlement row — fix in-session or Jira with query output.<br/><strong>At PS:</strong> Trace config in DB vs admin console — evidence before escalation.</p>
           </div>
           <div class="card tri">
             <h3>Live Slack ownership</h3>
@@ -1435,7 +1447,7 @@
         <ul class="bullets">
           <li data-icon="tri"><strong>I trace before I reset</strong> — identity → device → app, with ticket IDs and RCA, not guesswork</li>
           <li data-icon="o"><strong>LinkedIn HQ proven, Jamf-ready</strong> — same UEM failure modes; fast ramp on PlayStation's stack</li>
-          <li data-icon="x"><strong>Engineer empathy built in</strong> — Dropbox Sign &amp; Fax L2 plus a live SaaS I operate; I've been on their side of the keyboard</li>
+          <li data-icon="x"><strong>Engineer empathy built in</strong> — Dropbox L2 with Sentry, Datadog, admin profiles, Stripe/SQL, and Jira to trace bugs before or with engineering; plus a live SaaS I operate</li>
           <li data-icon="sq"><strong>Permanent fit</strong> — Tier 2 engineering enablement is the career I want, not a path into dev</li>
         </ul>
         <p class="lead" style="margin-top:20px;font-size:13px"><strong>Niall Darby</strong> · nialldarby11@icloud.com · 089 611 1810 · linkedin.com/in/niall-darby</p>

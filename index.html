@@ -1070,7 +1070,7 @@
             <ul class="ex-list">
               <li><strong>Stripe webhook</strong> — subscription.updated missed → SQL entitlement drift → backfill + idempotent handler</li>
               <li><strong>GitHub Actions</strong> — macOS build fail: expired Apple distribution cert, profile not in keychain</li>
-              <li><strong>Supabase RPC</strong> — signing flow timeout: payload blob too large → SQL compaction + slimmer fetch</li>
+              <li><strong>Supabase signing function</strong> — app calls a Postgres function remotely; timed out because payload was too large → SQL compaction + slimmer fetch</li>
             </ul>
           </div>
         </div>
@@ -1265,7 +1265,7 @@
               <span class="tag-pill ad">SQL / RCA</span>
               <code>apply_supabase_sql.sh</code>
               <p>Apply reviewed SQL to prod via Supabase CLI; capture output for the incident record.</p>
-              <p class="when"><strong>Say in interview:</strong> "Signing RPC timeout — compact payload migration with before/after query proof for eng."</p>
+              <p class="when"><strong>Say in interview:</strong> "Our signing flow uses a Supabase function — Postgres logic the app calls remotely. It timed out because the payload was too large, so I traced it in SQL, compacted what we store, and applied the migration with before/after proof."</p>
             </div>
             <div class="script-item">
               <span class="tag-pill ad">Deploy</span>

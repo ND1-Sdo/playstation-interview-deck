@@ -1,0 +1,10 @@
+# Standalone interview deck — public repo for easy Render deploy.
+services:
+  - type: web
+    name: playstation-interview-deck
+    runtime: static
+    staticPublishPath: ./
+    headers:
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
